@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEIE Docs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <nav id="navbar" class="navbar-collapsed">
+            <div class="navbar-header">
+                <span class="navbar-logo">CEIE</span>
+            </div>
+            <ul>
+                <li><a href="index.html"><span class="link-icon">🏠</span> <span class="link-text">Home</span></a></li>
+                <li><a href="v1.0.html"><span class="link-icon">🚀</span> <span class="link-text">v1.0</span></a></li>
+                <li><a href="v2.0.html"><span class="link-icon">🌐</span> <span class="link-text">v2.0</span></a></li>
+                <li><a href="v3.0.html"><span class="link-icon">🧑‍💻</span> <span class="link-text">v3.0</span></a>
+                </li>
+                <li><a href="v4.0.html"><span class="link-icon">⌚</span> <span class="link-text">v4.0</span></a></li>
+                <li><a href="v5.0.html"><span class="link-icon">🤖</span> <span class="link-text">v5.0</span></a></li>
+                <li><a href="contact.html"><span class="link-icon">❓</span> <span class="link-text">Support</span></a>
+                </li>
+            </ul>
+            <div class="navbar-footer">
+                <button id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon-light">☀️</span>
+                    <span class="theme-icon-dark">🌙</span>
+                </button>
+            </div>
+        </nav>
+
+        <main id="content">
+            <article>
+                <h1 id="main-title">Git Setup CEIE (v1.0)</h1>
+                <p>This section details the CEIE 1.0 “Git Setup CEIE” module, which automates and standardizes
+                    repository initialization, remote configuration, and local environment setup. It provides a set of
+                    CLI commands, Git hooks, and configuration files designed to streamline initial Git workflows for
+                    CEIE-based projects.</CEIE <section id="CEIE" aria-labelledby="CEIE-title">
+                <h2 id="Prerequisites">Prerequisites</h2>
+                <ul>
+                    <li><strong>Git:</strong> Version 2.x or higher</li>
+                    <li><strong>Java Runtime:</strong> JDK 11+ (required for CEIE CLI)</li>
+                    <li><strong>Network Access:</strong> Connectivity to your Git hosting provider (e.g., GitHub,
+                        GitLab)</li>
+                    <li><strong>Permissions:</strong> Write access to the target repository or organizational namespace
+                    </li>
+                </ul>
+                </section>
+
+                <section id="repository-initialization" aria-labelledby="repository-initialization-title">
+                    <h2 id="repository-initialization-title">Repository Initialization</h2>
+                    <p>
+                        To initialize a new CEIE-enabled Git repository, use the CEIE CLI:
+                    </p>
+                    <pre><code>ceie git init
+                    </code></pre>
+                    <p>
+                        This command:
+                    </p>
+                    <ul>
+                        <li>Creates a new Git repository if one does not exist.</li>
+                        <li>Adds the <code>.ceieconfig</code> template for CEIE-specific settings.</li>
+                        <li>Installs standardized Git hooks for pre‑commit and post‑commit validations.</li>
+                    </ul>
+                    <h3 id="Cloning Existing Repositories">Cloning Existing Repositories</h3>
+                    <p>
+                        To clone and configure an existing repository with CEIE defaults:
+                    </p>
+                    <pre><code>ceie git clone https://github.com/your-org/your-repo.git
+                    </code></pre>
+                    <p>
+                        After cloning, the CLI automatically:
+                    </p>
+                    <ul>
+                        <li>Initializes the <code>.ceieconfig</code> file.</li>
+                        <li>Sets up CEIE Git hooks.</li>
+                        <li>Verifies connectivity to remote branches.</li>
+                    </ul>
+                    <h3 id="Configuring Remotes">Configuring Remotes</h3>
+                    <p>
+                        To add or update a remote endpoint for CEIE synchronization:
+                    </p>
+                    <pre><code>ceie git remote add origin <remote-url>
+                    ceie git remote set-url origin <new-remote-url>
+                    </code></pre>
+                    <p>
+                        This command ensures that the remote URL is correctly set for CEIE operations.
+                    </p>
+                    <h3 id="CEIE Git Hooks">CEIE Git Hooks</h3>
+                    <p>
+                        CEIE installs custom Git hooks in <code>.git/hooks</code> to enforce repository policies:
+                    </p>
+                    <ul>
+                        <li><code>pre-commit</code> – Runs static code analysis and formatting checks.</li>
+                        <li><code>post-commit</code> – Updates CEIE audit logs and triggers local notifications.</li>
+                    </ul>
+                </section>
+
+                <section id="configuration" aria-labelledby="configuration">
+                    <h2 id="configuration-title">Configuration</h2>
+                    <p>
+                        The <code>.ceieconfig</code> file in the repository root contains CEIE-specific settings:
+                    </p>
+                    <pre><code>{
+                      "versioning": {
+                        "autoIncrement": true,
+                        "strategy": "semantic"
+                      },
+                      "repository": {
+                        "defaultBranch": "main",
+                        "protectMain": true
+                      },
+                      "hooks": {
+                        "preCommit": true,
+                        "postCommit": true
+                      }
+                    }
+                    </code></pre>
+                </section>
+
+                <section id="automating-common-git-commands" aria-labelledby="automating-common-git-commands-title">
+                    <h2 id="automating-common-git-commands-title">Automating Common Git Commands</h2>
+                    <p>
+                        CEIE provides aliases for frequent Git operations:
+                    </p>
+                    <ul>
+                        <li><code>ceie git sync</code> – Fetches, rebases onto <code>main</code>, and pushes local
+                            changes.</li>
+                        <li><code>ceie git version-bump --auto</code> – Applies semantic version increments based on
+                            commit messages.</li>
+                        <li><code>ceie git status</code> – Displays CEIE-enhanced status with audit metadata.</li>
+                        </ultroubleshooting <section id="troubleshooting" aria-labelledby="troubleshooting-title">
+                        <h2 id="troubleshooting-title">Troubleshooting</h2>
+                        <ul>
+                            <li>
+                                <strong>Hook Execution Fails:</strong>
+                                Verify that the hook scripts in <code>.git/hooks</code> have execute permissions and
+                                correct shebang lines.
+                            </li>
+                            <li>
+                                <strong>Remote Sync Errors:</strong>
+                                Ensure network connectivity and proper authentication (SSH keys or access tokens).
+                            </li>
+                            <li>
+                                <strong>Configuration Not Applied:</strong>
+                                Confirm the presence of a valid <code>.ceieconfig</code> file in the repository root.
+                            </li>
+                        </ul>
+
+                        <section id="best-practices" aria-labelledby="best-practices-title">
+                            <h2 id="best-practices-title">Best Practices</h2>
+                            <ul>
+                                <li>
+                                    <strong>Use Small, Focused Commits:</strong>
+                                    Commit related changes together (e.g., fixes for a single issue) to maintain a clear
+                                    audit trail.
+                                </li>
+                                <li>
+                                    <strong>Adopt Feature Branch Workflow:</strong>
+                                    Create dedicated branches for each feature or bugfix, then merge back into
+                                    <code>main</code> via pull requests.
+                                </li>
+                                <li>
+                                    <strong>Define a Branching Strategy:</strong>
+                                    Select a branching model (e.g., Gitflow or trunk-based) that aligns with your
+                                    release cycle and team size.
+                                </li>
+                                <li>
+                                    <strong>Validate Hooks Regularly:</strong>
+                                    Periodically review and test CEIE Git hooks to ensure compliance with repository
+                                    policies.
+                                </li>
+                            </ul>
+                            <br>
+                            <p>
+                                By following this Git setup guide, teams can leverage CEIE 1.0 to establish a
+                                consistent, automated foundation for version control and prepare for advanced CI/CD
+                                workflows in subsequent CEIE releases.
+                            </p>
+            </article>
+        </main>
+
+        <aside id="toc">
+            <h3>On this page</h3>
+            <ul id="toc-list">
+            </ul>
+        </aside>
+
+        <!-- Footer -->
+        <!-- <footer id="footer">
+            © <span id="current-year"></span> Your SaaS Company LLC. All rights reserved.
+        </footer> -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

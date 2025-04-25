@@ -1,0 +1,475 @@
+/* --- Base Styles & Variables --- */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #007bff;
+  --link-color: #0056b3;
+  --border-color: #e0e0e0;
+  --code-bg: #f8f8f8;
+  --code-text: #333;
+  --navbar-width-collapsed: 60px;
+  --navbar-width-expanded: 240px;
+  --navbar-bg-start: rgba(
+    230,
+    240,
+    255,
+    0.6
+  ); /* Light gradient start with transparency */
+  --navbar-bg-end: rgba(
+    200,
+    220,
+    255,
+    0.8
+  ); /* Light gradient end with transparency */
+  --navbar-text: #2c3e50;
+  --navbar-icon: #3498db;
+  --toc-bg: #f9f9f9;
+  --toc-link: #555;
+  --toc-link-hover: #007bff;
+  --toc-link-active: #0056b3;
+  --header-height: 60px; /* Adjust if you add a fixed header */
+  --blur-intensity: 8px;
+  --table-bg: #ffffff;
+  --table-text: #333333;
+  --table-border: #cccccc;
+  --header-bg: #2c3e50;
+  --header-text: #ecf0f1;
+  color-scheme: light dark;
+}
+
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --primary-color: #3a9bff;
+  --link-color: #6cacff;
+  --border-color: #444444;
+  --code-bg: #2b2b2b;
+  --code-text: #e0e0e0;
+  --navbar-bg-start: rgba(
+    20,
+    30,
+    50,
+    0.7
+  ); /* Dark gradient start with transparency */
+  --navbar-bg-end: rgba(
+    40,
+    50,
+    80,
+    0.85
+  ); /* Dark gradient end with transparency */
+  --navbar-text: #ecf0f1;
+  --navbar-icon: #5dade2;
+  --toc-bg: #2c2c2c;
+  --toc-link: #aaa;
+  --toc-link-hover: #3a9bff;
+  --toc-link-active: #6cacff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.table-responsive {
+  overflow-x: auto; /* Enable horizontal scroll on narrow screens :contentReference[oaicite:2]{index=2} */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Collapse borders for a clean look :contentReference[oaicite:3]{index=3} */
+  background-color: var(--table-bg);
+  color: var(--table-text);
+  margin-bottom: 1.5em;
+  font-family: Arial, sans-serif;
+}
+
+thead th {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  text-align: left;
+  padding: 0.75em;
+  position: sticky; /* Keep header visible on scroll :contentReference[oaicite:4]{index=4} */
+  top: 0;
+  z-index: 2;
+  border: 1px solid var(--table-border);
+}
+
+tbody td {
+  padding: 0.75em;
+  border: 1px solid var(--table-border);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: light-dark(
+    var(--table-bg),
+    #2c2c2c
+  ); /* Alternate row background using light-dark() :contentReference[oaicite:5]{index=5} */
+}
+
+tbody tr:hover {
+  background-color: rgba(
+    100,
+    149,
+    237,
+    0.1
+  ); /* Subtle highlight on hover :contentReference[oaicite:6]{index=6} */
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 1.25em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+/* Ensure the browser can render form controls in dark mode correctly */
+:root {
+  color-scheme: light dark; /* Honor user preference without extra overrides :contentReference[oaicite:7]{index=7} */
+}
+
+/* --- Navbar Styles --- */
+#navbar {
+  width: var(--navbar-width-collapsed);
+  height: 100vh;
+  position: fixed; /* Or sticky if preferred within a container */
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(
+    160deg,
+    var(--navbar-bg-start),
+    var(--navbar-bg-end)
+  );
+  backdrop-filter: blur(var(--blur-intensity));
+  -webkit-backdrop-filter: blur(var(--blur-intensity)); /* Safari */
+  border-right: 1px solid var(--border-color);
+  padding: 15px 0;
+  transition: width 0.3s ease, background-image 0.3s ease;
+  overflow: hidden; /* Important for collapsing text */
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+#navbar:hover,
+#navbar.navbar-expanded {
+  /* Use class for potential programmatic control */
+  width: var(--navbar-width-expanded);
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center icon when collapsed */
+  padding: 0 15px;
+  margin-bottom: 20px;
+  height: 40px; /* Fixed height */
+}
+
+.navbar-logo {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: var(--navbar-text);
+  opacity: 0; /* Hidden when collapsed */
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+#navbar:hover .navbar-logo,
+#navbar.navbar-expanded .navbar-logo {
+  opacity: 1;
+  margin-left: 10px; /* Add space next to icon */
+}
+
+#navbar ul {
+  list-style: none;
+  flex-grow: 1; /* Takes remaining vertical space */
+}
+
+#navbar li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 18px; /* Consistent padding */
+  text-decoration: none;
+  color: var(--navbar-text);
+  white-space: nowrap; /* Prevent text wrap */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow: hidden; /* Hide text when collapsed */
+}
+#navbar li a:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover */
+}
+
+.link-icon {
+  font-size: 1.3em; /* Icon size */
+  min-width: 24px; /* Ensure space for icon */
+  text-align: center;
+  margin-right: 0; /* No margin when collapsed */
+  transition: margin-right 0.3s ease;
+  color: var(--navbar-icon);
+}
+
+.link-text {
+  opacity: 0; /* Hidden when collapsed */
+  transition: opacity 0.2s ease 0.1s; /* Delay fade-in slightly */
+  margin-left: 15px; /* Space between icon and text */
+}
+
+/* Expand text and icon margin on hover/expanded */
+#navbar:hover .link-icon,
+#navbar.navbar-expanded .link-icon {
+  /* Reset if needed, or keep margin-right 0 */
+}
+
+#navbar:hover .link-text,
+#navbar.navbar-expanded .link-text {
+  opacity: 1;
+}
+
+.navbar-footer {
+  padding: 15px;
+  display: flex;
+  justify-content: center; /* Center button */
+}
+
+#theme-toggle {
+  background: none;
+  border: 1px solid var(--navbar-text);
+  color: var(--navbar-text);
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 1.2em;
+  line-height: 1; /* Prevent extra spacing */
+  opacity: 0; /* Hide initially */
+  transition: opacity 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+}
+#navbar:hover #theme-toggle,
+#navbar.navbar-expanded #theme-toggle {
+  opacity: 1;
+}
+
+#theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-icon-dark {
+  display: none;
+} /* Hide dark icon in light mode */
+body.dark-mode .theme-icon-light {
+  display: none;
+} /* Hide light icon in dark mode */
+body.dark-mode .theme-icon-dark {
+  display: inline;
+} /* Show dark icon in dark mode */
+
+/* --- Main Content Styles --- */
+#content {
+  flex-grow: 1; /* Takes up remaining space */
+  padding: 30px 40px;
+  margin-left: var(--navbar-width-collapsed); /* Space for collapsed navbar */
+  margin-right: 250px; /* Space for ToC sidebar */
+  transition: margin-left 0.3s ease;
+  max-width: 1100px; /* Optional: Limit content width for readability */
+  margin: 0 auto; /* Center content if max-width is set */
+  padding-left: calc(var(--navbar-width-collapsed) + 40px); /* Adjust padding */
+  padding-right: calc(250px + 40px); /* Adjust padding */
+}
+
+/* Adjust content margin when navbar expands */
+/* This might cause layout shift, consider if needed or handle differently */
+/*
+body:has(#navbar:hover) #content,
+body:has(#navbar.navbar-expanded) #content {
+    margin-left: var(--navbar-width-expanded);
+}
+*/
+
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#content h5,
+#content h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  color: var(--primary-color);
+  scroll-margin-top: 20px; /* Offset for sticky header/navbar */
+}
+#content h1 {
+  font-size: 2.2em;
+  margin-top: 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.3em;
+}
+#content h2 {
+  font-size: 1.8em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.2em;
+}
+#content h3 {
+  font-size: 1.4em;
+}
+#content h4 {
+  font-size: 1.2em;
+  color: var(--text-color);
+}
+
+#content p {
+  margin-bottom: 1em;
+}
+
+#content a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+#content a:hover {
+  text-decoration: underline;
+}
+
+#content pre {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
+  font-size: 0.9em;
+}
+
+#content code {
+  background-color: var(--code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+#content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 1em;
+}
+
+#content section {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+}
+
+/* --- Table of Contents (ToC) Styles --- */
+#toc {
+  width: 250px;
+  height: 100vh; /* Full viewport height */
+  position: fixed; /* Fixed position */
+  top: 0;
+  right: 0;
+  padding: 80px 20px 20px 20px; /* Add padding top to avoid overlap if header exists */
+  border-left: 1px solid var(--border-color);
+  background-color: var(--toc-bg);
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  z-index: 90;
+}
+
+#toc h3 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+#toc ul {
+  list-style: none;
+}
+
+#toc ul li {
+  margin-bottom: 5px;
+}
+
+#toc ul li a {
+  display: block;
+  text-decoration: none;
+  color: var(--toc-link);
+  font-size: 0.9em;
+  padding: 4px 0 4px 10px; /* Indent */
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-left-color 0.2s ease;
+}
+
+#toc ul li a:hover {
+  color: var(--toc-link-hover);
+}
+
+#toc ul li a.active {
+  color: var(--toc-link-active);
+  font-weight: 500;
+  border-left-color: var(--toc-link-active);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override variables for dark mode */
+    --table-bg: #1e1e1e;
+    --table-text: #f0f0f0;
+    --table-border: #444444;
+    --header-bg: #34495e;
+    --header-text: #ecf0f1;
+  }
+}
+
+/* --- Responsive Adjustments (Basic Example) --- */
+@media (max-width: 1024px) {
+  #toc {
+    display: none; /* Hide ToC on smaller screens */
+  }
+  #content {
+    margin-right: 0; /* Remove margin for ToC */
+    padding-right: 40px; /* Adjust padding */
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-width-collapsed: 0; /* Fully hide navbar */
+    --navbar-width-expanded: 250px; /* Width when toggled open */
+  }
+
+  #navbar {
+    /* Adjustments for mobile toggle needed - e.g., transform: translateX(-100%) */
+    /* Requires JS to handle a toggle button instead of hover */
+    /* Hiding complex hover logic for now */
+    width: 0;
+    border: none;
+    padding: 0; /* Hide padding */
+  }
+
+  #content {
+    margin-left: 0;
+    padding-left: 20px; /* Adjust padding */
+    padding-right: 20px;
+  }
+
+  /* Add a hamburger button and JS logic for mobile */
+}

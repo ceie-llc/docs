@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEIE Docs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <nav id="navbar" class="navbar-collapsed">
+            <div class="navbar-header">
+                <span class="navbar-logo">CEIE</span>
+            </div>
+            <ul>
+                <li><a href="index.html"><span class="link-icon">🏠</span> <span class="link-text">Home</span></a></li>
+                <li><a href="v1.0.html"><span class="link-icon">🚀</span> <span class="link-text">v1.0</span></a></li>
+                <li><a href="v2.0.html"><span class="link-icon">🌐</span> <span class="link-text">v2.0</span></a></li>
+                <li><a href="v3.0.html"><span class="link-icon">🧑‍💻</span> <span class="link-text">v3.0</span></a>
+                </li>
+                <li><a href="v4.0.html"><span class="link-icon">⌚</span> <span class="link-text">v4.0</span></a></li>
+                <li><a href="v5.0.html"><span class="link-icon">🤖</span> <span class="link-text">v5.0</span></a></li>
+                <li><a href="contact.html"><span class="link-icon">❓</span> <span class="link-text">Support</span></a>
+                </li>
+            </ul>
+            <div class="navbar-footer">
+                <button id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon-light">☀️</span>
+                    <span class="theme-icon-dark">🌙</span>
+                </button>
+            </div>
+        </nav>
+
+        <main id="content">
+            <article>
+                <h1 id="main-title">CEIE (v2.0) </h1>
+                <p>CEIE 2.0 is delivered as an npm package that provides the core automation engine for version
+                    management and CI/CD workflows. It leverages semantic versioning and conventional commit conventions
+                    to automate release processes, generate changelogs, and integrate with external CI/CD platforms.
+                    </CEIE <section id="CEIE" aria-labelledby="CEIE-title">
+                <h2 id="Prerequisites">Prerequisites</h2>
+                <ul>
+                    <li><strong>Node.js:</strong> Version 14.x or higher</li>
+                    <li><strong>npm:</strong> Version 6.x or higher</li>
+                    <li><strong>Semantic Commit Conventions:</strong> Commit messages must follow Conventional Commits.
+                    </li>
+                    <li><strong>Git Repository:</strong> Initialized and configured via CEIE 1.0 or equivalent</li>
+                </ul>
+
+                </section>
+
+                <section id="installation" aria-labelledby="installation-title">
+                    <h2 id="installation-title">Installation</h2>
+                    <pre><code>npm install -g ceie-automation
+                    </code></pre>
+                    <p>
+                        Installs the <code>ceie-automation</code> CLI globally. The CLI exposes commands to initialize
+                        configurations, run release workflows, and manage versions.
+                    </p>
+                </section>
+
+                <section id="configuration" aria-labelledby="configuration">
+                    <h2 id="configuration-title">Configuration</h2>
+                    <p>
+                        The core configuration file controls release and automation behavior. Place
+                        <code>ceie.config.yml</code> in the repository root:
+                    </p>
+                    <pre><code>versioning:
+                      strategy: semantic
+                      autoIncrement: true
+                    
+                    automation:
+                      triggers:
+                        onPush: true
+                        onPRMerge: true
+                      steps:
+                        - name: Install Dependencies
+                          command: npm ci
+                        - name: Run Tests
+                          command: npm test
+                        - name: Release
+                          command: ceie-automation release
+                    </code></pre>
+                    <p>
+                        - <strong>strategy:</strong> Version increment strategy adhering to SemVer 2.0.0
+                        :contentReference[oaicite:1]{index=1} <br>
+                        - <strong>triggers:</strong> Events that initiate the workflow (push, PR merge) <brccsv -
+                            <strong>steps:</strong> Ordered list of commands executed in the pipeline
+                    </p>
+                </section>
+
+                <section id="ccsv" aria-labelledby="ccsv-title">
+                    <h2 id="ccsv-title">Conventional Commits & Semantic Versioning</h2>
+                    <p>
+                        CEIE 2.0 parses commit messages to determine version bumps:
+                    </p>
+                    <ul>
+                        <li><code>feat:</code> → Minor version increment</li>
+                        <li><code>fix:</code> → Patch version increment</li>
+                        <li><code>BREAKING CHANGE:</code> → Major version increment</li>
+                    </ul>
+                    <p>
+                        This follows the Conventional Commits specification and SemVer rules for automated version
+                        determination.
+                    </p>
+
+                    <section id="cli-commands" aria-labelledby="cli-commands-title">
+                        <h2 id="cli-commands-title">CLI Commands</h2>
+                        <ul>
+                            <li>
+                                <code>ceie-automation init</code>
+                                Generates a template <code>ceie.config.yml</code> with default settings.
+                            </li>
+                            <li>
+                                <code>ceie-automation run</code>
+                                Executes the defined workflow steps in sequence.
+                            </li>
+                            <li>
+                                <code>ceie-automation release</code>
+                                Performs version calculation, generates changelog, creates Git tag, and publishes
+                                release artifacts.
+                            </li>
+                            <li>
+                                <code>ceie-automation status</code>
+                                Displays current version, pending changes, and last release metadata.
+                            </li>
+                        </ul>
+
+                        <section id="release-workflow" aria-labelledby="release-workflow-title">
+                            <h2 id="release-workflow-title">Release Workflow</h2>
+                            <p>
+                                A typical release workflow with CEIE 2.0 includes:
+                            </p>
+                            <ol>
+                                <li>Commit changes using Conventional Commits.</li>
+                                <li>Push to a protected branch (e.g., <code>main</code>).</li>
+                                <li>CI system invokes <code>ceie-automation run</code>.</li>
+                                <li>Tests and lint checks execute.</li>
+                                <li><code>ceie-automation release</code> determines next version, updates changelog, and
+                                    creates a Git tag.</li>
+                                <li>Package is published and release notes are generated.</li>
+                            </ol>
+                            <br>
+                            <p>
+                                This process mirrors industry best practices for automated release pipelines.
+                            </p>
+                        </section>
+
+                        <section id="integration-examples" aria-labelledby="integration-examples-title">
+                            <h2 id="integration-examples-title">Integration Examples</h2>
+                            <p><strong>GitHub Actions:</strong></p>
+                            <pre><code>jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm ci
+      - run: ceie-automation run --config ceie.config.yml
+</code></pre>
+                        </section>
+
+                        <section id="troubleshooting" aria-labelledby="troubleshooting-title">
+                            <h2 id="troubleshooting-title">Troubleshooting</h2>
+                            <ul>
+                                <li>
+                                    <strong>“Invalid commit message”:</strong>
+                                    Ensure commits follow Conventional Commits format.
+                                </li>
+                                <li>
+                                    <strong>“No version changes detected”:</strong>
+                                    Confirm that new commits include valid <code>feat:</code>, <code>fix:</code>, or
+                                    <code>BREAKING CHANGE:</code> tags.
+                                </li>
+                                <li>
+                                    <strong>Workflow failures:</strong>
+                                    Review step logs and verify that all specified commands execute successfully in the
+                                    CI environment.
+                                </li>
+                            </ul>
+                        </section>
+
+                        <section id="best-practices" aria-labelledby="best-practices-title">
+                            <h2 id="best-practices-title">Best Practices</h2>
+                            <ul>
+                                <li>Enforce commit message linting (e.g., with <code>commitlint</code> and Husky).</li>
+                                <li>Protect release branches and require pull-request reviews.</li>
+                                <li>Use isolated environments for build and test steps to ensure reproducibility.</li>
+                                <li>Regularly update CEIE CLI to incorporate new fixes and features.</li>
+                            </ul>
+                            <br>
+                            <p>
+                                CEIE 2.0 provides a turnkey solution for automating versioning and releases, enabling
+                                teams to adopt a standardized, reliable CI/CD workflow.
+                            </p>
+                        </section>
+
+            </article>
+        </main>
+
+        <aside id="toc">
+            <h3>On this page</h3>
+            <ul id="toc-list">
+            </ul>
+        </aside>
+
+        <!-- Footer -->
+        <!-- <footer id="footer">
+            © <span id="current-year"></span> Your SaaS Company LLC. All rights reserved.
+        </footer> -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

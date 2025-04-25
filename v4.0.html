@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEIE Docs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <nav id="navbar" class="navbar-collapsed">
+            <div class="navbar-header">
+                <span class="navbar-logo">CEIE</span>
+            </div>
+            <ul>
+                <li><a href="index.html"><span class="link-icon">🏠</span> <span class="link-text">Home</span></a></li>
+                <li><a href="v1.0.html"><span class="link-icon">🚀</span> <span class="link-text">v1.0</span></a></li>
+                <li><a href="v2.0.html"><span class="link-icon">🌐</span> <span class="link-text">v2.0</span></a></li>
+                <li><a href="v3.0.html"><span class="link-icon">🧑‍💻</span> <span class="link-text">v3.0</span></a>
+                </li>
+                <li><a href="v4.0.html"><span class="link-icon">⌚</span> <span class="link-text">v4.0</span></a></li>
+                <li><a href="v5.0.html"><span class="link-icon">🤖</span> <span class="link-text">v5.0</span></a></li>
+                <li><a href="contact.html"><span class="link-icon">❓</span> <span class="link-text">Support</span></a>
+                </li>
+            </ul>
+            <div class="navbar-footer">
+                <button id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon-light">☀️</span>
+                    <span class="theme-icon-dark">🌙</span>
+                </button>
+            </div>
+        </nav>
+
+        <main id="content">
+            <article>
+                <h1 id="main-title">VISTA: CEIE Custom Versioning Model (v4.0)</h1>
+                <p>VISTA is the CEIE 4.0 Gradle plugin that implements a Custom Versioning Model, automating project
+                    version calculation, application, and rollback within the Gradle build lifecycle. It integrates
+                    semantic versioning, Git metadata, and user‑defined override files to provide precise control over
+                    version management.
+                    </section>
+
+                <section id="prerequisites" aria-labelledby="prerequisites-title">
+                    <h2 id="prerequisites-title">Prerequisites</h2>
+                    <ul>
+                        <li><strong>Gradle:</strong> Version 7.0 or higher (Gradle Wrapper recommended).</li>
+                        <li><strong>JDK:</strong> Java 11 or higher, to support Kotlin-based plugins and tasks.</li>
+                        <li><strong>Git:</strong> Version 2.x+ for extracting commit metadata.</li>
+                        <li><strong>version.properties (optional):</strong> File in project root to specify explicit
+                            version overrides.</li>
+                    </ul>
+                </section>
+
+                <section id="plugin-installation" aria-labelledby="plugin-installation">
+                    <h2 id="plugin-installation-title">Plugin Installation</h2>
+                    <p>
+                        Apply the VISTA plugin via the Gradle Plugins DSL in your <code>settings.gradle.kts</code> or
+                        <code>build.gradle.kts</code>:
+                    </p>
+                    <pre><code>plugins {
+                      id("io.ceie.vista") version "4.0.0"
+                    }
+                    </code></pre>
+                    <p>
+                        The plugin is published to the central Gradle Plugin Portal and automatically downloaded during
+                        the build initialization phase.
+                    </p>
+                </section>
+
+                <section id="configuration" aria-labelledby="configuration-title">
+                    <h2 id="configuration-title">Configuration</h2>
+                    <p>
+                        Configure VISTA by declaring a <code>vista</code> extension in your
+                        <code>build.gradle.kts</code>:
+                    </p>
+                    <pre><code>vista {
+                      // Path to an optional version.properties file
+                      versionFile.set(file("version.properties"))
+                    
+                      // Automatic semantic version increments based on Git commits
+                      autoIncrement.set(true)
+                    
+                      // Versioning strategy: "semantic" | "calendar" | "custom"
+                      strategy.set("semantic")
+                    
+                      // Prefix for Git-generated tags (e.g., "v" to produce "v1.2.3")
+                      tagPrefix.set("v")
+                    
+                      // Property name to inject computed version into project.version
+                      propertyName.set("projectVersion")
+                    }
+                    </code></pre>
+                    <p>
+                        - <strong>versionFile:</strong> Allows explicit version overrides when present. <br>
+                        - <strong>autoIncrement:</strong> Enables automatic bumping based on commit types (feat, fix,
+                        BREAKING CHANGE). <br>
+                        - <strong>strategy:</strong> “semantic” uses Conventional Commits; other strategies may be
+                        defined by user extensions.
+                    </p>
+
+                    <h2 id="version-properties">Version Properties</h2>
+                    <p>
+                        When present, <code>version.properties</code> in the project root defines an explicit
+                        version:
+                    </p>
+                    <pre><code>version=2.3.0
+                        buildMetadata=20250419.1234
+                        </code></pre>
+                    <p>
+                        VISTA reads this file before Git analysis and respects the <code>version</code> value,
+                        allowing manual overrides for hotfixes or emergency releases.
+                    </p>
+                    <h3 id="Provided Tasks">Provided Tasks</h3>
+                    <ul>
+                        <li>
+                            <code>vistaGenerateVersion</code>
+                            Calculates the next version and writes to <code>version.properties</code> (if enabled).
+                        </li>
+                        <li>
+                            <code>vistaApplyVersion</code>
+                            Sets <code>project.version</code> to the computed or overridden version before compilation.
+                        </li>
+                        <li>
+                            <code>vistaRelease</code>
+                            Tags the Git repository with the computed version tag (e.g., “v2.3.0”) and pushes the tag to
+                            origin.
+                        </li>
+                        <li>
+                            <code>vistaRollback</code>
+                            Reverts <code>version.properties</code> and Git tags to the previous stable version.
+                        </li>
+                    </ul>
+
+                    <section id="build-integration" aria-labelledby="build-integration">
+                        <h2 id="build-integration-title">Build Integration</h2>
+                        <p>
+                            The plugin hooks into the standard lifecycle:
+                        </p>
+                        <ol>
+                            <li>During <code>initialize</code>, <code>vistaGenerateVersion</code> runs if
+                                <code>autoIncrement</code> is enabled.
+                            </li>
+                            <li>Before <code>compileJava</code> (or equivalent), <code>vistaApplyVersion</code> injects
+                                <code>project.version</code>.
+                            </li>
+                            <li>After <code>build</code>, <code>vistaRelease</code> can be executed in CI pipelines to
+                                tag releases.</li>
+                        </ol>
+                    </section>
+
+                    <section id="ci-pipeline-example" aria-labelledby="ci-pipeline-example">
+                        <h2 id="ci-pipeline-example-title">CI Pipeline Example (GitHub Actions)</h2>
+                        <pre><code>jobs:
+                            release:
+                              runs-on: ubuntu-latest
+                              steps:
+                                - uses: actions/checkout@v2
+                                - uses: actions/setup-java@v3
+                                  with:
+                                    distribution: 'temurin'
+                                    java-version: '11'
+                                - name: Generate and Apply Version
+                                  run: ./gradlew vistaGenerateVersion vistaApplyVersion
+                                - name: Build
+                                  run: ./gradlew build
+                                - name: Tag Release
+                                  run: ./gradlew vistaRelease
+                          </code></pre>
+                    </section>
+
+                    <section id="best-practices" aria-labelledby="best-practices">
+                        <h2 id="best-practices-title">Best Practices</h2>
+                        <ul>
+                            <li>
+                                Enforce Conventional Commit messages (feat/ fix/ BREAKING CHANGE) to drive semantic
+                                versioning.
+                            </li>
+                            <li>
+                                Commit <code>version.properties</code> changes only via
+                                <code>vistaGenerateVersion</code> to maintain auditability.
+                            </li>
+                            <li>
+                                Protect main branches and require PR reviews before tagging releases.
+                            </li>
+                            <li>
+                                Use <code>vistaRollback</code> for emergency rollbacks, preserving continuity of version
+                                history.
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section id="troubleshooting" aria-labelledby="troubleshooting">
+                        <h2 id="troubleshooting-title">Troubleshooting</h2>
+                        <ul>
+                            <li>
+                                <strong>Incorrect Version Calculation:</strong>
+                                Verify commit message formats and <code>strategy</code> setting.
+                            </li>
+                            <li>
+                                <strong>Task Not Found:</strong>
+                                Ensure the plugin ID and version are correctly declared in <code>plugins</code> block.
+                            </li>
+                            <li>
+                                <strong>Git Tag Push Fails:</strong>
+                                Confirm that authentication tokens are available in CI and that <code>origin</code> is
+                                writable.
+                            </li>
+                        </ul>
+
+                        <p>
+                            VISTA (CEIE 4.0) delivers enterprise‑grade versioning automation within Gradle, ensuring
+                            consistent, traceable, and reversible release management.
+                        </p>
+                    </section>
+
+            </article>
+
+
+        </main>
+
+        <aside id="toc">
+            <h3>On this page</h3>
+            <ul id="toc-list">
+            </ul>
+        </aside>
+
+        <!-- Footer -->
+        <!-- <footer id="footer">
+            © <span id="current-year"></span> Your SaaS Company LLC. All rights reserved.
+        </footer> -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
