@@ -29,7 +29,7 @@
   --toc-link-active: #0056b3;
   --header-height: 60px; /* Adjust if you add a fixed header */
   --blur-intensity: 8px;
-  --table-bg: #ffffff;
+  --table-bg: #f9f9f9;
   --table-text: #333333;
   --table-border: #cccccc;
   --header-bg: #2c3e50;
@@ -63,7 +63,7 @@ body.dark-mode {
   --toc-link: #aaa;
   --toc-link-hover: #3a9bff;
   --toc-link-active: #6cacff;
-  --table-bg: #333333;
+  --table-bg: #2c2c2c;
   --table-text: #ffffff;
   --table-border: #cccccc;
 }
@@ -86,6 +86,29 @@ body {
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+a .arrow {
+  font-size: 1.2em;         /* enlarge arrow */
+  vertical-align: center;   /* align arrow with text */
+  display: inline-block;
+  /* optional: display:inline-block for finer control */
+}
+
+.arrow {
+  font-size: 1.2em;                                    /* enlarge arrow */ :contentReference[oaicite:9]{index=9}
+  visibility: hidden;                                  /* hide by default */ :contentReference[oaicite:10]{index=10}
+  margin-left: 0.3em;
+}
+
+a:hover .arrow {
+  visibility: visible;                                 /* reveal on hover */ :contentReference[oaicite:11]{index=11}
+}
+a:focus .arrow {
+  visibility: visible;                                 /* reveal on focus */ :contentReference[oaicite:12]{index=12}
+}
+a:focus-visible .arrow {
+  visibility: visible;                                 /* reveal on focus-visible */ :contentReference[oaicite:13]{index=13}
 }
 
 .app-container {
@@ -446,7 +469,7 @@ body:has(#navbar.navbar-expanded) #content {
 /* --- Responsive Adjustments (Basic Example) --- */
 @media (max-width: 1024px) {
   #toc {
-    display: none; /* Hide ToC on smaller screens */
+    display: none; /* Displays ToC on smaller screens */
   }
   #content {
     margin-right: 0; /* Remove margin for ToC */
@@ -464,6 +487,7 @@ body:has(#navbar.navbar-expanded) #content {
     /* Adjustments for mobile toggle needed - e.g., transform: translateX(-100%) */
     /* Requires JS to handle a toggle button instead of hover */
     /* Hiding complex hover logic for now */
+    display: block; /* Show navbar on mobile */
     width: 0;
     border: none;
     padding: 0; /* Hide padding */
@@ -476,4 +500,10 @@ body:has(#navbar.navbar-expanded) #content {
   }
 
   /* Add a hamburger button and JS logic for mobile */
+  #navbar .navbar-header {
+    justify-content: space-between; /* Space between icon and button */
+  }
+  #navbar .navbar-header .navbar-logo {
+    display: none; /* Hide logo on mobile */
+  }
 }
