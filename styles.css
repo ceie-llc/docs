@@ -63,6 +63,9 @@ body.dark-mode {
   --toc-link: #aaa;
   --toc-link-hover: #3a9bff;
   --toc-link-active: #6cacff;
+  --table-bg: #333333;
+  --table-text: #ffffff;
+  --table-border: #cccccc;
 }
 
 * {
@@ -239,6 +242,7 @@ caption {
 #navbar:hover .link-icon,
 #navbar.navbar-expanded .link-icon {
   /* Reset if needed, or keep margin-right 0 */
+  margin-right: 0;
 }
 
 #navbar:hover .link-text,
